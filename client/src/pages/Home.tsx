@@ -1,27 +1,27 @@
 /**
  * LAS CRASHPAD — Home Page
  * Design: Desert Electric / Neo-Vegas Brutalism
- * Reference: Original design screenshot — classic Welcome to Las Vegas sign shield shape
- *            adapted with City of Las Vegas modern neon palette
+ * Rev6: Fixed left panel (truly frozen), right-column-only scrolling content,
+ *       stronger two-tone background (pure black → deep navy #12121A),
+ *       Rev7 sign with correct starburst
  * Colors: #FF6B1A (neon orange), #3BB5FF (electric blue), #FF2D78 (hot magenta),
- *         #F5EDD6 (cream/warm white), #0A0A0A (near-black bg)
+ *         #F5EDD6 (cream/warm white), #0A0A0A (near-black hero), #12121A (dark navy below)
  * Fonts: Bebas Neue (display/headlines), DM Sans (body)
- * Rev4: Updated body copy, 8-item bullet list (blue markers, orange text), 1.3rem body font
  */
 
 import { useEffect, useRef, useState } from "react";
 
 // ── Asset URLs (webdev lifecycle-persistent) ──────────────────────────────────
 const NEON_SIGN_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-rev6-DGCyDQeCBRBbdrN3JGHPsz.webp";
-
-const STARBURST_ICON_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-starburst-v4-E7cMPJmnZY9P59jfR4tihr.webp";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-rev7-DHt2gRfkYwKuE8Z8JxWDVT.webp";
 
 const LOGO_URL =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-logo-v3-bGdVrsRMxWRPNqra85PcJv.webp";
 
-// ── Rev4: 8 benefit bullets ───────────────────────────────────────────────────
+// Left panel width — used for both the fixed panel and the right-column offset
+const LEFT_W = "42%";
+
+// ── Data ──────────────────────────────────────────────────────────────────────
 const BENEFITS = [
   "Best price",
   "Nicest rooms",
@@ -34,10 +34,10 @@ const BENEFITS = [
 ];
 
 const STATS = [
-  { value: "200+", label: "HAPPY GUESTS" },
-  { value: "5 YEARS", label: "IN SERVICE" },
-  { value: "11.3 MONTHS", label: "AVG STAY" },
-  { value: "4.9★", label: "AVG RATING" },
+  { value: "200+", label: "HAPPY GUESTS", animated: true },
+  { value: "5 YEARS", label: "IN SERVICE", animated: false },
+  { value: "11.3 MONTHS", label: "AVG STAY", animated: false },
+  { value: "4.9★", label: "AVG RATING", animated: false },
 ];
 
 const ROOMS = [
@@ -79,7 +79,7 @@ const TESTIMONIALS = [
   },
 ];
 
-// ── Animated counter hook for Happy Guests stat ──────────────────────────────
+// ── Animated counter for Happy Guests ────────────────────────────────────────
 function useCountUp(target: number, duration = 1800) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -144,6 +144,7 @@ function HappyGuestsStat() {
   );
 }
 
+// ── Main Component ────────────────────────────────────────────────────────────
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
 
@@ -156,7 +157,9 @@ export default function Home() {
   const scrollToRooms = () =>
     document.getElementById("rooms")?.scrollIntoView({ behavior: "smooth" });
   const scrollToTestimonials = () =>
-    document.getElementById("testimonials")?.scrollIntoView({ behavior: "smooth" });
+    document
+      .getElementById("testimonials")
+      ?.scrollIntoView({ behavior: "smooth" });
 
   return (
     <div
@@ -168,7 +171,7 @@ export default function Home() {
       }}
     >
       {/* ═══════════════════════════════════════════════════════════
-          NAV
+          NAV — fixed across full width
       ═══════════════════════════════════════════════════════════ */}
       <nav
         style={{
@@ -176,7 +179,7 @@ export default function Home() {
           top: 0,
           left: 0,
           right: 0,
-          zIndex: 100,
+          zIndex: 200,
           height: "56px",
           display: "flex",
           alignItems: "center",
@@ -187,10 +190,9 @@ export default function Home() {
             : "rgba(10,10,10,0.88)",
           borderBottom: "1px solid rgba(255,107,26,0.18)",
           backdropFilter: "blur(14px)",
-          transition: "background-color 250ms ease, border-color 250ms ease",
+          transition: "background-color 250ms ease",
         }}
       >
-        {/* Logo mark + wordmark */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
           <img
             src={LOGO_URL}
@@ -217,7 +219,6 @@ export default function Home() {
           </span>
         </div>
 
-        {/* BOOK NOW button — orange-to-pink gradient */}
         <button
           onClick={scrollToRooms}
           style={{
@@ -231,7 +232,8 @@ export default function Home() {
             cursor: "pointer",
             boxShadow:
               "0 0 14px rgba(255,107,26,0.5), 0 0 6px rgba(255,45,120,0.4)",
-            transition: "box-shadow 150ms ease, transform 120ms ease, filter 150ms ease",
+            transition:
+              "box-shadow 150ms ease, transform 120ms ease, filter 150ms ease",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.filter = "brightness(1.12)";
@@ -251,91 +253,96 @@ export default function Home() {
       </nav>
 
       {/* ═══════════════════════════════════════════════════════════
-          HERO — asymmetric split matching original proportions
-          Left ~45% | Right ~55%
+          FIXED LEFT PANEL — neon sign, always visible
+          position: fixed so it stays frozen at all scroll depths
       ═══════════════════════════════════════════════════════════ */}
-      <section
+      <div
         style={{
+          position: "fixed",
+          top: "56px",
+          left: 0,
+          width: LEFT_W,
+          height: "calc(100vh - 56px)",
+          zIndex: 100,
           display: "flex",
-          minHeight: "100vh",
-          paddingTop: "56px",
-          alignItems: "flex-start",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem 1.5rem 2rem 2.5rem",
+          background:
+            "radial-gradient(ellipse 70% 60% at 50% 52%, rgba(160,60,5,0.28) 0%, rgba(10,10,10,0) 65%), #0A0A0A",
         }}
       >
-        {/* ── LEFT PANEL: neon sign — STICKY, floats over scrolling content ── */}
+        {/* Right-edge amber divider line */}
         <div
           style={{
-            width: "45%",
-            flexShrink: 0,
-            position: "sticky",
-            top: "56px",
-            height: "calc(100vh - 56px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "2.5rem 1.5rem 2.5rem 2.5rem",
-            /* Warm radial glow emanating from the sign */
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: "1px",
+            height: "100%",
             background:
-              "radial-gradient(ellipse 75% 65% at 50% 52%, rgba(160,60,5,0.22) 0%, rgba(10,10,10,0) 68%), #0A0A0A",
+              "linear-gradient(to bottom, transparent 0%, rgba(255,107,26,0.55) 15%, rgba(255,140,40,0.85) 50%, rgba(255,107,26,0.55) 85%, transparent 100%)",
+          }}
+        />
+
+        {/* Sign image — mix-blend-mode:screen makes black areas transparent */}
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            maxWidth: "400px",
           }}
         >
-          {/* Right-edge amber divider line */}
           <div
             style={{
               position: "absolute",
-              top: 0,
-              right: 0,
-              width: "1px",
-              height: "100%",
+              inset: "-60px",
               background:
-                "linear-gradient(to bottom, transparent 0%, rgba(255,107,26,0.55) 15%, rgba(255,140,40,0.85) 50%, rgba(255,107,26,0.55) 85%, transparent 100%)",
+                "radial-gradient(ellipse at center, rgba(255,120,20,0.18) 0%, rgba(255,80,0,0.06) 50%, transparent 72%)",
+              pointerEvents: "none",
+              zIndex: 0,
             }}
           />
-
-          {/* Sign — floating directly on the panel, no frame wrapper */}
-          <div style={{ position: "relative", width: "100%", maxWidth: "400px" }}>
-            {/* Wide atmospheric haze behind sign */}
-            <div
-              style={{
-                position: "absolute",
-                inset: "-60px",
-                background:
-                  "radial-gradient(ellipse at center, rgba(255,120,20,0.15) 0%, rgba(255,80,0,0.05) 50%, transparent 72%)",
-                pointerEvents: "none",
-                zIndex: 0,
-              }}
-            />
-            {/* The sign — mix-blend-mode:screen makes black areas transparent, eliminating any baked-in frame */}
-            <img
-              src={NEON_SIGN_URL}
-              alt="Welcome to Fabulous — The LAS Crashpad, Las Vegas Nevada neon sign"
-              style={{
-                display: "block",
-                width: "100%",
-                height: "auto",
-                position: "relative",
-                zIndex: 1,
-                mixBlendMode: "screen",
-                filter: "brightness(1.08) contrast(1.05) saturate(1.12)",
-              }}
-            />
-          </div>
+          <img
+            src={NEON_SIGN_URL}
+            alt="Welcome to Fabulous — The LAS Crashpad, Las Vegas Nevada neon sign"
+            style={{
+              display: "block",
+              width: "100%",
+              height: "auto",
+              position: "relative",
+              zIndex: 1,
+              mixBlendMode: "screen",
+              filter: "brightness(1.08) contrast(1.05) saturate(1.12)",
+            }}
+          />
         </div>
+      </div>
 
-        {/* ── RIGHT PANEL: headline + content ──────────────────── */}
-        <div
+      {/* ═══════════════════════════════════════════════════════════
+          SCROLLABLE RIGHT COLUMN
+          marginLeft = LEFT_W so it sits entirely to the right of the fixed panel
+          All sections — hero content, rooms, testimonials, footer — live here
+      ═══════════════════════════════════════════════════════════ */}
+      <div
+        style={{
+          marginLeft: LEFT_W,
+          paddingTop: "56px",
+        }}
+      >
+        {/* ── HERO RIGHT: headline + content ── */}
+        <section
           style={{
-            flex: 1,
+            minHeight: "calc(100vh - 56px)",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             padding: "3rem 3rem 3rem 2.75rem",
-            minWidth: 0,
             background:
               "linear-gradient(120deg, rgba(255,107,26,0.025) 0%, transparent 55%), #0A0A0A",
           }}
         >
-          {/* MAIN HEADLINE — Rev2: larger to fill full right column width */}
+          {/* MAIN HEADLINE */}
           <h1
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
@@ -352,7 +359,7 @@ export default function Home() {
             BEST VALUE IN VEGAS
           </h1>
 
-          {/* SUBHEADLINE — single line under BEST VALUE IN VEGAS, no starburst */}
+          {/* SUBHEADLINE */}
           <div
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
@@ -369,7 +376,7 @@ export default function Home() {
             ONLY MINUTES TO TERMINAL
           </div>
 
-          {/* Rev4: BODY COPY — 1.3rem, cream white */}
+          {/* BODY COPY */}
           <p
             style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -385,7 +392,7 @@ export default function Home() {
             room is limited. Start with the best. Move into the best.
           </p>
 
-          {/* Rev4: BULLET BENEFITS LIST — blue markers, orange text */}
+          {/* BENEFIT BULLETS */}
           <ul
             style={{
               listStyle: "none",
@@ -404,9 +411,9 @@ export default function Home() {
                   display: "flex",
                   alignItems: "flex-start",
                   gap: "0.5rem",
-              fontFamily: "'DM Sans', sans-serif",
-                fontSize: "0.92rem",
-                lineHeight: 1.45,
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: "0.92rem",
+                  lineHeight: 1.45,
                 }}
               >
                 <span
@@ -434,7 +441,7 @@ export default function Home() {
             ))}
           </ul>
 
-          {/* CTA BUTTONS — side by side, no wrap */}
+          {/* CTA BUTTONS */}
           <div
             style={{
               display: "flex",
@@ -464,12 +471,12 @@ export default function Home() {
               onMouseEnter={(e) => {
                 e.currentTarget.style.filter = "brightness(1.12)";
                 e.currentTarget.style.boxShadow =
-                  "0 0 30px rgba(255,107,26,0.72), 0 0 14px rgba(255,45,120,0.5), inset 0 1px 0 rgba(255,255,255,0.22)";
+                  "0 0 30px rgba(255,107,26,0.72), 0 0 14px rgba(255,45,120,0.5)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.filter = "brightness(1)";
                 e.currentTarget.style.boxShadow =
-                  "0 0 18px rgba(255,107,26,0.55), 0 0 8px rgba(255,45,120,0.35), inset 0 1px 0 rgba(255,255,255,0.18)";
+                  "0 0 18px rgba(255,107,26,0.55), 0 0 8px rgba(255,45,120,0.35)";
               }}
               onMouseDown={(e) =>
                 (e.currentTarget.style.transform = "scale(0.97)")
@@ -513,7 +520,7 @@ export default function Home() {
             </button>
           </div>
 
-          {/* TRUST BAR STATS — single horizontal row, no wrap */}
+          {/* STATS BAR */}
           <div
             style={{
               display: "flex",
@@ -524,10 +531,8 @@ export default function Home() {
               justifyContent: "space-between",
             }}
           >
-            {/* Happy Guests — animated counter */}
             <HappyGuestsStat />
-            {/* Remaining stats */}
-            {STATS.filter((s) => s.label !== "HAPPY GUESTS").map((s) => (
+            {STATS.filter((s) => !s.animated).map((s) => (
               <div key={s.label}>
                 <div
                   style={{
@@ -558,61 +563,61 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* SCROLL INDICATOR */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "0.6rem 0 2rem",
-          gap: "0.3rem",
-          backgroundColor: "#16161A",
-        }}
-      >
-        <span
+        {/* ── SCROLL INDICATOR — sits between hero and rooms ── */}
+        <div
           style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "0.62rem",
-            letterSpacing: "0.28em",
-            color: "#F5EDD6",
-            opacity: 0.35,
-            textTransform: "uppercase",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "0.8rem 0 1.6rem",
+            gap: "0.3rem",
+            /* Two-tone transition: starts matching hero black, fades to navy */
+            background:
+              "linear-gradient(to bottom, #0A0A0A 0%, #12121A 100%)",
           }}
         >
-          SCROLL
-        </span>
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 16 16"
-          fill="none"
-          style={{ opacity: 0.3 }}
-        >
-          <path
-            d="M2 5L8 11L14 5"
-            stroke="#F5EDD6"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
+          <span
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "0.62rem",
+              letterSpacing: "0.28em",
+              color: "#F5EDD6",
+              opacity: 0.35,
+              textTransform: "uppercase",
+            }}
+          >
+            SCROLL
+          </span>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill="none"
+            style={{ opacity: 0.3 }}
+          >
+            <path
+              d="M2 5L8 11L14 5"
+              stroke="#F5EDD6"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
 
-      {/* ═══════════════════════════════════════════════════════════
-          ROOMS SECTION
-      ═══════════════════════════════════════════════════════════ */}
-      <section
-        id="rooms"
-        style={{
-          backgroundColor: "#16161A",
-          padding: "5rem 3.5rem",
-          borderTop: "1px solid rgba(255,107,26,0.2)",
-        }}
-      >
-        <div style={{ maxWidth: "1140px", margin: "0 auto" }}>
+        {/* ═══════════════════════════════════════════════════════════
+            ROOMS SECTION — dark navy background
+        ═══════════════════════════════════════════════════════════ */}
+        <section
+          id="rooms"
+          style={{
+            backgroundColor: "#12121A",
+            padding: "5rem 3rem",
+            borderTop: "1px solid rgba(255,107,26,0.2)",
+          }}
+        >
           <div style={{ marginBottom: "2.75rem" }}>
             <h2
               style={{
@@ -644,7 +649,7 @@ export default function Home() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
               gap: "1.4rem",
             }}
           >
@@ -652,7 +657,7 @@ export default function Home() {
               <div
                 key={room.name}
                 style={{
-                  backgroundColor: "#0D0D10",
+                  backgroundColor: "#0A0A0F",
                   border: "1px solid rgba(255,107,26,0.2)",
                   padding: "1.9rem",
                   position: "relative",
@@ -661,7 +666,7 @@ export default function Home() {
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = "rgba(255,107,26,0.55)";
                   e.currentTarget.style.boxShadow =
-                    "0 0 28px rgba(255,107,26,0.1), inset 0 0 28px rgba(255,107,26,0.03)";
+                    "0 0 28px rgba(255,107,26,0.1)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = "rgba(255,107,26,0.2)";
@@ -693,7 +698,6 @@ export default function Home() {
                     color: "#F5EDD6",
                     letterSpacing: "0.04em",
                     margin: "0 0 0.7rem",
-                    textShadow: "0 0 1px rgba(245,237,214,0.5)",
                   }}
                 >
                   {room.name}
@@ -763,21 +767,19 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ═══════════════════════════════════════════════════════════
-          TESTIMONIALS SECTION
-      ═══════════════════════════════════════════════════════════ */}
-      <section
-        id="testimonials"
-        style={{
-          backgroundColor: "#1A1A20",
-          padding: "5rem 3.5rem",
-          borderTop: "1px solid rgba(59,181,255,0.15)",
-        }}
-      >
-        <div style={{ maxWidth: "1140px", margin: "0 auto" }}>
+        {/* ═══════════════════════════════════════════════════════════
+            TESTIMONIALS SECTION — slightly lighter navy
+        ═══════════════════════════════════════════════════════════ */}
+        <section
+          id="testimonials"
+          style={{
+            backgroundColor: "#171720",
+            padding: "5rem 3rem",
+            borderTop: "1px solid rgba(59,181,255,0.15)",
+          }}
+        >
           <div style={{ marginBottom: "2.75rem" }}>
             <h2
               style={{
@@ -786,7 +788,6 @@ export default function Home() {
                 color: "#F5EDD6",
                 letterSpacing: "0.03em",
                 margin: "0 0 0.5rem",
-                textShadow: "0 0 1px rgba(245,237,214,0.7)",
               }}
             >
               WHAT CREW MEMBERS ARE SAYING
@@ -809,7 +810,7 @@ export default function Home() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
               gap: "1.4rem",
             }}
           >
@@ -817,7 +818,7 @@ export default function Home() {
               <div
                 key={t.name}
                 style={{
-                  backgroundColor: "#16161A",
+                  backgroundColor: "#12121A",
                   border: "1px solid rgba(59,181,255,0.18)",
                   padding: "1.9rem",
                   transition: "border-color 200ms ease, box-shadow 200ms ease",
@@ -883,88 +884,89 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ═══════════════════════════════════════════════════════════
-          FOOTER
-      ═══════════════════════════════════════════════════════════ */}
-      <footer
-        style={{
-          backgroundColor: "#16161A",
-          borderTop: "1px solid rgba(255,107,26,0.22)",
-          padding: "1.75rem 3.5rem",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: "1rem",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
-          <img
-            src={LOGO_URL}
-            alt=""
+        {/* ═══════════════════════════════════════════════════════════
+            FOOTER
+        ═══════════════════════════════════════════════════════════ */}
+        <footer
+          style={{
+            backgroundColor: "#12121A",
+            borderTop: "1px solid rgba(255,107,26,0.22)",
+            padding: "1.75rem 3rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "1rem",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
+            <img
+              src={LOGO_URL}
+              alt=""
+              style={{
+                width: "26px",
+                height: "26px",
+                objectFit: "contain",
+                filter: "drop-shadow(0 0 4px rgba(255,107,26,0.5))",
+              }}
+            />
+            <span
+              style={{
+                fontFamily: "'Bebas Neue', sans-serif",
+                fontSize: "0.95rem",
+                letterSpacing: "0.13em",
+                color: "#F5EDD6",
+                opacity: 0.55,
+              }}
+            >
+              THE LAS CRASHPAD
+            </span>
+          </div>
+
+          <div
             style={{
-              width: "26px",
-              height: "26px",
-              objectFit: "contain",
-              filter: "drop-shadow(0 0 4px rgba(255,107,26,0.5))",
-            }}
-          />
-          <span
-            style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "0.95rem",
-              letterSpacing: "0.13em",
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "0.76rem",
               color: "#F5EDD6",
-              opacity: 0.55,
+              opacity: 0.32,
+              letterSpacing: "0.05em",
             }}
           >
-            THE LAS CRASHPAD
-          </span>
-        </div>
+            Las Vegas, Nevada · Aviation Crew Housing · ©{" "}
+            {new Date().getFullYear()}
+          </div>
 
-        <div
-          style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "0.76rem",
-            color: "#F5EDD6",
-            opacity: 0.32,
-            letterSpacing: "0.05em",
-          }}
-        >
-          Las Vegas, Nevada · Aviation Crew Housing · ©{" "}
-          {new Date().getFullYear()}
-        </div>
-
-        <button
-          onClick={scrollToRooms}
-          style={{
-            backgroundColor: "transparent",
-            border: "1px solid rgba(255,107,26,0.42)",
-            color: "#FF6B1A",
-            fontFamily: "'Bebas Neue', sans-serif",
-            letterSpacing: "0.1em",
-            fontSize: "0.88rem",
-            padding: "0.38rem 1.25rem",
-            cursor: "pointer",
-            transition: "all 150ms ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "#FF6B1A";
-            e.currentTarget.style.backgroundColor = "rgba(255,107,26,0.08)";
-            e.currentTarget.style.boxShadow = "0 0 10px rgba(255,107,26,0.2)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "rgba(255,107,26,0.42)";
-            e.currentTarget.style.backgroundColor = "transparent";
-            e.currentTarget.style.boxShadow = "none";
-          }}
-        >
-          CHECK AVAILABILITY
-        </button>
-      </footer>
+          <button
+            onClick={scrollToRooms}
+            style={{
+              backgroundColor: "transparent",
+              border: "1px solid rgba(255,107,26,0.42)",
+              color: "#FF6B1A",
+              fontFamily: "'Bebas Neue', sans-serif",
+              letterSpacing: "0.1em",
+              fontSize: "0.88rem",
+              padding: "0.38rem 1.25rem",
+              cursor: "pointer",
+              transition: "all 150ms ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "#FF6B1A";
+              e.currentTarget.style.backgroundColor = "rgba(255,107,26,0.08)";
+              e.currentTarget.style.boxShadow =
+                "0 0 10px rgba(255,107,26,0.2)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = "rgba(255,107,26,0.42)";
+              e.currentTarget.style.backgroundColor = "transparent";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
+            CHECK AVAILABILITY
+          </button>
+        </footer>
+      </div>
     </div>
   );
 }
