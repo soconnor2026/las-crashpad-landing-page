@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 
 // ── Asset URLs (webdev lifecycle-persistent) ──────────────────────────────────
 const NEON_SIGN_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-v4-Dz3dXK3zzagsL6LFndEFQm.webp";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-rev1-6ivVySVmatzQjdjKvGndfh.webp";
 
 const LOGO_URL =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-logo-v3-bGdVrsRMxWRPNqra85PcJv.webp";
@@ -76,7 +76,7 @@ const TESTIMONIALS = [
   },
 ];
 
-// ── Inline starburst SVG (matches original — orange body, blue top points) ────
+// ── Inline starburst SVG — multi-color neon tubes: blue, light orange, deep orange with glow ────
 function StarburstIcon({ size = 56 }: { size?: number }) {
   return (
     <svg
@@ -87,25 +87,31 @@ function StarburstIcon({ size = 56 }: { size?: number }) {
       xmlns="http://www.w3.org/2000/svg"
       style={{
         filter:
-          "drop-shadow(0 0 6px rgba(255,107,26,0.9)) drop-shadow(0 0 14px rgba(255,107,26,0.4))",
+          "drop-shadow(0 0 5px #3BB5FF) drop-shadow(0 0 10px rgba(255,107,26,0.9)) drop-shadow(0 0 22px rgba(255,107,26,0.45)) drop-shadow(0 0 4px rgba(59,181,255,0.7))",
         flexShrink: 0,
       }}
     >
-      {/* Orange points (all except top two) */}
-      <polygon points="50,50 46,8 54,8" fill="#FF6B1A" />
-      <polygon points="50,50 8,46 8,54" fill="#FF6B1A" />
-      <polygon points="50,50 92,46 92,54" fill="#FF6B1A" />
-      <polygon points="50,50 54,92 46,92" fill="#FF6B1A" />
-      <polygon points="50,50 18,18 22,14" fill="#FF6B1A" />
-      <polygon points="50,50 82,18 78,14" fill="#FF6B1A" />
-      <polygon points="50,50 18,82 14,78" fill="#FF6B1A" />
-      <polygon points="50,50 82,82 86,78" fill="#FF6B1A" />
-      {/* Blue top two points */}
-      <polygon points="50,50 38,4 44,2" fill="#3BB5FF" />
-      <polygon points="50,50 62,4 56,2" fill="#3BB5FF" />
-      {/* Center circle */}
-      <circle cx="50" cy="50" r="7" fill="#FF6B1A" />
-      <circle cx="50" cy="50" r="4" fill="#FFF0D0" />
+      {/* Deep orange points — left, right, bottom */}
+      <polygon points="50,50 47,12 53,12" fill="#FF6B1A" />
+      <polygon points="50,50 8,47 8,53" fill="#FF6B1A" />
+      <polygon points="50,50 92,47 92,53" fill="#FF6B1A" />
+      <polygon points="50,50 53,88 47,88" fill="#E85500" />
+      {/* Light orange diagonal points */}
+      <polygon points="50,50 17,17 21,13" fill="#FFB347" />
+      <polygon points="50,50 83,17 79,13" fill="#FFB347" />
+      <polygon points="50,50 17,83 13,79" fill="#FFB347" />
+      <polygon points="50,50 83,83 87,79" fill="#FFB347" />
+      {/* Electric blue top two points */}
+      <polygon points="50,50 40,3 46,1" fill="#3BB5FF" />
+      <polygon points="50,50 60,3 54,1" fill="#3BB5FF" />
+      {/* Neon tube outlines for depth */}
+      <polygon points="50,50 47,12 53,12" fill="none" stroke="#FF8C40" strokeWidth="0.5" opacity="0.6" />
+      <polygon points="50,50 40,3 46,1" fill="none" stroke="#7DD4FF" strokeWidth="0.5" opacity="0.7" />
+      <polygon points="50,50 60,3 54,1" fill="none" stroke="#7DD4FF" strokeWidth="0.5" opacity="0.7" />
+      {/* Center glow circle */}
+      <circle cx="50" cy="50" r="8" fill="#FF6B1A" />
+      <circle cx="50" cy="50" r="5" fill="#FFD580" />
+      <circle cx="50" cy="50" r="2.5" fill="#FFFBE8" />
     </svg>
   );
 }
@@ -183,11 +189,11 @@ export default function Home() {
           </span>
         </div>
 
-        {/* BOOK NOW button */}
+        {/* BOOK NOW button — orange-to-pink gradient */}
         <button
           onClick={scrollToRooms}
           style={{
-            backgroundColor: "#FF2D78",
+            background: "linear-gradient(90deg, #FF6B1A 0%, #FF2D78 100%)",
             color: "#fff",
             fontFamily: "'Bebas Neue', sans-serif",
             letterSpacing: "0.12em",
@@ -196,16 +202,18 @@ export default function Home() {
             border: "none",
             cursor: "pointer",
             boxShadow:
-              "0 0 14px rgba(255,45,120,0.55), 0 0 4px rgba(255,45,120,0.9)",
-            transition: "box-shadow 150ms ease, transform 120ms ease",
+              "0 0 14px rgba(255,107,26,0.5), 0 0 6px rgba(255,45,120,0.4)",
+            transition: "box-shadow 150ms ease, transform 120ms ease, filter 150ms ease",
           }}
           onMouseEnter={(e) => {
+            e.currentTarget.style.filter = "brightness(1.12)";
             e.currentTarget.style.boxShadow =
-              "0 0 26px rgba(255,45,120,0.75), 0 0 8px rgba(255,45,120,1)";
+              "0 0 26px rgba(255,107,26,0.7), 0 0 12px rgba(255,45,120,0.55)";
           }}
           onMouseLeave={(e) => {
+            e.currentTarget.style.filter = "brightness(1)";
             e.currentTarget.style.boxShadow =
-              "0 0 14px rgba(255,45,120,0.55), 0 0 4px rgba(255,45,120,0.9)";
+              "0 0 14px rgba(255,107,26,0.5), 0 0 6px rgba(255,45,120,0.4)";
           }}
           onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
           onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
@@ -305,15 +313,15 @@ export default function Home() {
               "linear-gradient(120deg, rgba(255,107,26,0.025) 0%, transparent 55%), #0D0D0D",
           }}
         >
-          {/* MAIN HEADLINE — fills the full right column width */}
+          {/* MAIN HEADLINE — slightly larger, fills full right column width */}
           <h1
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(3.5rem, 6.5vw, 5.8rem)",
-              lineHeight: 0.95,
+              fontSize: "clamp(3.8rem, 7vw, 6.4rem)",
+              lineHeight: 0.93,
               letterSpacing: "0.025em",
               color: "#F5EDD6",
-              margin: "0 0 0.9rem 0",
+              margin: "0 0 0.75rem 0",
               whiteSpace: "nowrap",
               textShadow:
                 "0 0 1px rgba(245,237,214,1), 0 0 10px rgba(245,237,214,0.35), 0 0 30px rgba(245,237,214,0.12), 0 2px 0 rgba(0,0,0,0.9)",
@@ -322,23 +330,28 @@ export default function Home() {
             BEST VALUE IN VEGAS
           </h1>
 
-          {/* SUBHEADLINE with starburst icon */}
+          {/* SUBHEADLINE — starburst LEFT, stacked text RIGHT-JUSTIFIED under VEGAS */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "0.8rem",
+              gap: "1rem",
               marginBottom: "1.6rem",
+              justifyContent: "flex-start",
             }}
           >
-            <StarburstIcon size={52} />
+            {/* Colorful starburst — detailed multi-color neon, left of subhead */}
+            <StarburstIcon size={62} />
+            {/* Stacked subhead — right-justified, pushed to align under VEGAS */}
             <div
               style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "clamp(1.75rem, 3.2vw, 2.6rem)",
-                lineHeight: 1.05,
+                fontSize: "clamp(1.85rem, 3.4vw, 2.8rem)",
+                lineHeight: 1.0,
                 letterSpacing: "0.06em",
                 color: "#FF6B1A",
+                textAlign: "right",
+                marginLeft: "auto",
                 textShadow:
                   "0 0 8px rgba(255,107,26,0.95), 0 0 20px rgba(255,107,26,0.5), 0 0 40px rgba(255,107,26,0.2)",
               }}
@@ -414,20 +427,21 @@ export default function Home() {
             ))}
           </ul>
 
-          {/* CTA BUTTONS */}
+          {/* CTA BUTTONS — side by side, no wrap */}
           <div
             style={{
               display: "flex",
               gap: "1rem",
-              flexWrap: "wrap",
+              flexWrap: "nowrap",
               marginBottom: "2.25rem",
+              alignItems: "center",
             }}
           >
             <button
               onClick={scrollToRooms}
               style={{
-                backgroundColor: "#FF6B1A",
-                color: "#0A0A0A",
+                background: "linear-gradient(90deg, #FF6B1A 0%, #FF2D78 100%)",
+                color: "#fff",
                 fontFamily: "'Bebas Neue', sans-serif",
                 letterSpacing: "0.1em",
                 fontSize: "1.05rem",
@@ -436,19 +450,19 @@ export default function Home() {
                 cursor: "pointer",
                 fontWeight: 700,
                 boxShadow:
-                  "0 0 16px rgba(255,107,26,0.5), inset 0 1px 0 rgba(255,255,255,0.18)",
+                  "0 0 18px rgba(255,107,26,0.55), 0 0 8px rgba(255,45,120,0.35), inset 0 1px 0 rgba(255,255,255,0.18)",
                 transition:
-                  "box-shadow 150ms ease, transform 120ms ease, background-color 150ms ease",
+                  "box-shadow 150ms ease, transform 120ms ease, filter 150ms ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#ff7c30";
+                e.currentTarget.style.filter = "brightness(1.12)";
                 e.currentTarget.style.boxShadow =
-                  "0 0 28px rgba(255,107,26,0.72), inset 0 1px 0 rgba(255,255,255,0.22)";
+                  "0 0 30px rgba(255,107,26,0.72), 0 0 14px rgba(255,45,120,0.5), inset 0 1px 0 rgba(255,255,255,0.22)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#FF6B1A";
+                e.currentTarget.style.filter = "brightness(1)";
                 e.currentTarget.style.boxShadow =
-                  "0 0 16px rgba(255,107,26,0.5), inset 0 1px 0 rgba(255,255,255,0.18)";
+                  "0 0 18px rgba(255,107,26,0.55), 0 0 8px rgba(255,45,120,0.35), inset 0 1px 0 rgba(255,255,255,0.18)";
               }}
               onMouseDown={(e) =>
                 (e.currentTarget.style.transform = "scale(0.97)")
