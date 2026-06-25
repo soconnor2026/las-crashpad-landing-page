@@ -359,21 +359,42 @@ export default function Home() {
             BEST VALUE IN VEGAS
           </h1>
 
-          {/* SUBHEADLINE */}
+          {/* SUBHEADLINE — SVG textLength stretches text to exactly fill column width */}
           <div
             style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(2.4rem, 4.5vw, 4.2rem)",
-              lineHeight: 1.0,
-              letterSpacing: "0.06em",
-              color: "#FF6B1A",
+              width: "100%",
               margin: "0 0 1.6rem 0",
-              whiteSpace: "nowrap",
-              textShadow:
-                "0 0 8px rgba(255,107,26,0.95), 0 0 20px rgba(255,107,26,0.5), 0 0 40px rgba(255,107,26,0.2)",
+              lineHeight: 1.0,
+              overflow: "visible",
             }}
           >
-            ONLY MINUTES TO TERMINAL
+            <svg
+              width="100%"
+              height="1.15em"
+              viewBox="0 0 1000 100"
+              preserveAspectRatio="none"
+              style={{
+                display: "block",
+                height: "clamp(2.4rem, 4.5vw, 4.2rem)",
+                filter:
+                  "drop-shadow(0 0 8px rgba(255,107,26,0.95)) drop-shadow(0 0 20px rgba(255,107,26,0.5))",
+              }}
+            >
+              <text
+                x="0"
+                y="82"
+                textLength="1000"
+                lengthAdjust="spacingAndGlyphs"
+                style={{
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "90px",
+                  fill: "#FF6B1A",
+                  letterSpacing: "2",
+                }}
+              >
+                ONLY MINUTES TO THE TERMINAL
+              </text>
+            </svg>
           </div>
 
           {/* BODY COPY */}
