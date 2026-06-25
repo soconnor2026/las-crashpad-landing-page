@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 
 // ── Asset URLs (webdev lifecycle-persistent) ──────────────────────────────────
 const NEON_SIGN_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-rev1-6ivVySVmatzQjdjKvGndfh.webp";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-rev2-6HX5JAsxZVgPPznVnx4qJw.webp";
 
 const LOGO_URL =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-logo-v3-bGdVrsRMxWRPNqra85PcJv.webp";
@@ -76,7 +76,10 @@ const TESTIMONIALS = [
   },
 ];
 
-// ── Inline starburst SVG — multi-color neon tubes: blue, light orange, deep orange with glow ────
+// ── Inline starburst SVG — detailed neon tube style matching the sign's starburst ────────────────
+// Each tip is ONE consistent color with a bright core fading to glow at the tip.
+// 8 points: alternating electric blue (#3BB5FF), deep orange (#FF6B1A), light orange (#FFB347)
+// Neon tube effect: bright filled core polygon + slightly wider translucent outer glow polygon
 function StarburstIcon({ size = 56 }: { size?: number }) {
   return (
     <svg
@@ -87,31 +90,58 @@ function StarburstIcon({ size = 56 }: { size?: number }) {
       xmlns="http://www.w3.org/2000/svg"
       style={{
         filter:
-          "drop-shadow(0 0 5px #3BB5FF) drop-shadow(0 0 10px rgba(255,107,26,0.9)) drop-shadow(0 0 22px rgba(255,107,26,0.45)) drop-shadow(0 0 4px rgba(59,181,255,0.7))",
+          "drop-shadow(0 0 6px #3BB5FF) drop-shadow(0 0 12px rgba(255,107,26,1)) drop-shadow(0 0 28px rgba(255,107,26,0.55)) drop-shadow(0 0 5px rgba(59,181,255,0.8))",
         flexShrink: 0,
       }}
     >
-      {/* Deep orange points — left, right, bottom */}
-      <polygon points="50,50 47,12 53,12" fill="#FF6B1A" />
-      <polygon points="50,50 8,47 8,53" fill="#FF6B1A" />
-      <polygon points="50,50 92,47 92,53" fill="#FF6B1A" />
-      <polygon points="50,50 53,88 47,88" fill="#E85500" />
-      {/* Light orange diagonal points */}
-      <polygon points="50,50 17,17 21,13" fill="#FFB347" />
-      <polygon points="50,50 83,17 79,13" fill="#FFB347" />
-      <polygon points="50,50 17,83 13,79" fill="#FFB347" />
-      <polygon points="50,50 83,83 87,79" fill="#FFB347" />
-      {/* Electric blue top two points */}
-      <polygon points="50,50 40,3 46,1" fill="#3BB5FF" />
-      <polygon points="50,50 60,3 54,1" fill="#3BB5FF" />
-      {/* Neon tube outlines for depth */}
-      <polygon points="50,50 47,12 53,12" fill="none" stroke="#FF8C40" strokeWidth="0.5" opacity="0.6" />
-      <polygon points="50,50 40,3 46,1" fill="none" stroke="#7DD4FF" strokeWidth="0.5" opacity="0.7" />
-      <polygon points="50,50 60,3 54,1" fill="none" stroke="#7DD4FF" strokeWidth="0.5" opacity="0.7" />
-      {/* Center glow circle */}
-      <circle cx="50" cy="50" r="8" fill="#FF6B1A" />
-      <circle cx="50" cy="50" r="5" fill="#FFD580" />
-      <circle cx="50" cy="50" r="2.5" fill="#FFFBE8" />
+      {/* ── POINT 1: TOP — electric blue ── */}
+      {/* outer glow */}
+      <polygon points="50,50 46,5 54,5" fill="#3BB5FF" opacity="0.35" />
+      {/* core tube */}
+      <polygon points="50,50 48,8 52,8" fill="#3BB5FF" />
+      {/* bright highlight center line */}
+      <polygon points="50,50 49.3,6 50.7,6" fill="#B8E8FF" opacity="0.9" />
+
+      {/* ── POINT 2: TOP-RIGHT — deep orange ── */}
+      <polygon points="50,50 83,17 87,21" fill="#FF6B1A" opacity="0.35" />
+      <polygon points="50,50 81,20 84,23" fill="#FF6B1A" />
+      <polygon points="50,50 82,21 83,22" fill="#FFD0A0" opacity="0.85" />
+
+      {/* ── POINT 3: RIGHT — light orange ── */}
+      <polygon points="50,50 95,46 95,54" fill="#FFB347" opacity="0.35" />
+      <polygon points="50,50 92,48 92,52" fill="#FFB347" />
+      <polygon points="50,50 93,49.3 93,50.7" fill="#FFE5B0" opacity="0.85" />
+
+      {/* ── POINT 4: BOTTOM-RIGHT — electric blue ── */}
+      <polygon points="50,50 83,83 79,87" fill="#3BB5FF" opacity="0.35" />
+      <polygon points="50,50 81,80 78,83" fill="#3BB5FF" />
+      <polygon points="50,50 80,81 79,82" fill="#B8E8FF" opacity="0.85" />
+
+      {/* ── POINT 5: BOTTOM — deep orange ── */}
+      <polygon points="50,50 46,95 54,95" fill="#FF6B1A" opacity="0.35" />
+      <polygon points="50,50 48,92 52,92" fill="#E85500" />
+      <polygon points="50,50 49.3,94 50.7,94" fill="#FFD0A0" opacity="0.85" />
+
+      {/* ── POINT 6: BOTTOM-LEFT — light orange ── */}
+      <polygon points="50,50 17,83 13,79" fill="#FFB347" opacity="0.35" />
+      <polygon points="50,50 19,80 22,77" fill="#FFB347" />
+      <polygon points="50,50 20,79 21,78" fill="#FFE5B0" opacity="0.85" />
+
+      {/* ── POINT 7: LEFT — electric blue ── */}
+      <polygon points="50,50 5,46 5,54" fill="#3BB5FF" opacity="0.35" />
+      <polygon points="50,50 8,48 8,52" fill="#3BB5FF" />
+      <polygon points="50,50 7,49.3 7,50.7" fill="#B8E8FF" opacity="0.85" />
+
+      {/* ── POINT 8: TOP-LEFT — deep orange ── */}
+      <polygon points="50,50 17,17 21,13" fill="#FF6B1A" opacity="0.35" />
+      <polygon points="50,50 20,20 23,17" fill="#FF6B1A" />
+      <polygon points="50,50 21,21 22,20" fill="#FFD0A0" opacity="0.85" />
+
+      {/* ── CENTER GLOW — white-hot core ── */}
+      <circle cx="50" cy="50" r="9" fill="#FF6B1A" opacity="0.9" />
+      <circle cx="50" cy="50" r="6" fill="#FFD580" />
+      <circle cx="50" cy="50" r="3.5" fill="#FFFBE8" />
+      <circle cx="50" cy="50" r="1.5" fill="#FFFFFF" />
     </svg>
   );
 }
@@ -313,11 +343,11 @@ export default function Home() {
               "linear-gradient(120deg, rgba(255,107,26,0.025) 0%, transparent 55%), #0D0D0D",
           }}
         >
-          {/* MAIN HEADLINE — slightly larger, fills full right column width */}
+          {/* MAIN HEADLINE — Rev2: larger to fill full right column width */}
           <h1
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(3.8rem, 7vw, 6.4rem)",
+              fontSize: "clamp(4.2rem, 7.8vw, 7.2rem)",
               lineHeight: 0.93,
               letterSpacing: "0.025em",
               color: "#F5EDD6",
@@ -340,13 +370,13 @@ export default function Home() {
               justifyContent: "flex-start",
             }}
           >
-            {/* Colorful starburst — detailed multi-color neon, left of subhead */}
-            <StarburstIcon size={62} />
-            {/* Stacked subhead — right-justified, pushed to align under VEGAS */}
+            {/* Colorful starburst — fills the full height of the two-line subhead block */}
+            <StarburstIcon size={96} />
+            {/* Stacked subhead — Rev2: doubled font size, right-justified under VEGAS */}
             <div
               style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "clamp(1.85rem, 3.4vw, 2.8rem)",
+                fontSize: "clamp(2.8rem, 5.2vw, 4.6rem)",
                 lineHeight: 1.0,
                 letterSpacing: "0.06em",
                 color: "#FF6B1A",
