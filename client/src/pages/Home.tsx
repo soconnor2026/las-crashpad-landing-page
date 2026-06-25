@@ -79,20 +79,68 @@ const TESTIMONIALS = [
   },
 ];
 
-// ── Starburst icon — generated image matching the sign's starburst exactly ──
-function StarburstIcon({ size = 120 }: { size?: number }) {
+// ── Animated counter hook for Happy Guests stat ──────────────────────────────
+function useCountUp(target: number, duration = 1800) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const started = useRef(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true;
+          const start = performance.now();
+          const tick = (now: number) => {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.round(eased * target));
+            if (progress < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [target, duration]);
+  return { count, ref };
+}
+
+function HappyGuestsStat() {
+  const { count, ref } = useCountUp(200, 1800);
   return (
-    <img
-      src={STARBURST_ICON_URL}
-      alt="Neon starburst"
-      width={size}
-      height={size}
-      style={{
-        flexShrink: 0,
-        mixBlendMode: "screen" as const,
-        filter: "drop-shadow(0 0 12px rgba(255,80,0,0.8)) drop-shadow(0 0 20px rgba(59,181,255,0.6))",
-      }}
-    />
+    <div ref={ref}>
+      <div
+        style={{
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontSize: "1.65rem",
+          letterSpacing: "0.04em",
+          color: "#FF6B1A",
+          lineHeight: 1,
+          textShadow:
+            "0 0 10px rgba(255,107,26,0.65), 0 0 22px rgba(255,107,26,0.22)",
+        }}
+      >
+        {count}+
+      </div>
+      <div
+        style={{
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: "0.67rem",
+          letterSpacing: "0.15em",
+          color: "#F5EDD6",
+          opacity: 0.5,
+          marginTop: "0.22rem",
+          textTransform: "uppercase",
+        }}
+      >
+        HAPPY GUESTS
+      </div>
+    </div>
   );
 }
 
@@ -310,48 +358,21 @@ export default function Home() {
             BEST VALUE IN VEGAS
           </h1>
 
-          {/* SUBHEADLINE — starburst LEFT, stacked text RIGHT-JUSTIFIED under VEGAS */}
+          {/* SUBHEADLINE — single line under BEST VALUE IN VEGAS, no starburst */}
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem",
-              marginBottom: "1.6rem",
-              justifyContent: "flex-start",
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "clamp(2.4rem, 4.5vw, 4.2rem)",
+              lineHeight: 1.0,
+              letterSpacing: "0.06em",
+              color: "#FF6B1A",
+              margin: "0 0 1.6rem 0",
+              whiteSpace: "nowrap",
+              textShadow:
+                "0 0 8px rgba(255,107,26,0.95), 0 0 20px rgba(255,107,26,0.5), 0 0 40px rgba(255,107,26,0.2)",
             }}
           >
-            {/* Colorful starburst — generated image matching the sign's starburst exactly */}
-            <img
-              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-starburst-icon-3QrLS7GAvxaRifYUTu3BpD.webp"
-              alt="Atomic starburst"
-              style={{
-                width: "110px",
-                height: "110px",
-                objectFit: "contain",
-                flexShrink: 0,
-                mixBlendMode: "screen",
-                filter:
-                  "drop-shadow(0 0 8px rgba(255,107,26,0.7)) drop-shadow(0 0 14px rgba(59,181,255,0.5)) brightness(1.15) saturate(1.2)",
-              }}
-            />
-            {/* Stacked subhead — Rev2: doubled font size, right-justified under VEGAS */}
-            <div
-              style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "clamp(3.2rem, 6vw, 5.4rem)",
-                lineHeight: 1.0,
-                letterSpacing: "0.08em",
-                color: "#FF6B1A",
-                textAlign: "right",
-                marginLeft: "auto",
-                textShadow:
-                  "0 0 8px rgba(255,107,26,0.95), 0 0 20px rgba(255,107,26,0.5), 0 0 40px rgba(255,107,26,0.2)",
-              }}
-            >
-              ONLY MINUTES
-              <br />
-              TO TERMINAL
-            </div>
+            ONLY MINUTES TO TERMINAL
           </div>
 
           {/* Rev4: BODY COPY — 1.3rem, cream white */}
@@ -498,17 +519,21 @@ export default function Home() {
             </button>
           </div>
 
-          {/* TRUST BAR STATS */}
+          {/* TRUST BAR STATS — single horizontal row, no wrap */}
           <div
             style={{
               display: "flex",
-              gap: "2.5rem",
-              flexWrap: "wrap",
+              gap: "0",
+              flexWrap: "nowrap",
               paddingTop: "1.75rem",
               borderTop: "1px solid rgba(255,107,26,0.22)",
+              justifyContent: "space-between",
             }}
           >
-            {STATS.map((s) => (
+            {/* Happy Guests — animated counter */}
+            <HappyGuestsStat />
+            {/* Remaining stats */}
+            {STATS.filter((s) => s.label !== "HAPPY GUESTS").map((s) => (
               <div key={s.label}>
                 <div
                   style={{
