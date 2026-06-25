@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 
 // ── Asset URLs (webdev lifecycle-persistent) ──────────────────────────────────
 const NEON_SIGN_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-rev2-6HX5JAsxZVgPPznVnx4qJw.webp";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-rev3-8nTbGmXBdWmWjtqp79Bpnq.webp";
 
 const LOGO_URL =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-logo-v3-bGdVrsRMxWRPNqra85PcJv.webp";
@@ -76,72 +76,91 @@ const TESTIMONIALS = [
   },
 ];
 
-// ── Inline starburst SVG — detailed neon tube style matching the sign's starburst ────────────────
-// Each tip is ONE consistent color with a bright core fading to glow at the tip.
-// 8 points: alternating electric blue (#3BB5FF), deep orange (#FF6B1A), light orange (#FFB347)
-// Neon tube effect: bright filled core polygon + slightly wider translucent outer glow polygon
-function StarburstIcon({ size = 56 }: { size?: number }) {
+// ── Inline starburst SVG — FLAT WIDE DIAMOND-LOZENGE points matching the real Las Vegas sign ──
+// 8 points: 4 cardinal = DEEP RED-ORANGE, 4 diagonal = ELECTRIC BLUE
+// Using path-based wide flat diamonds for maximum visual width
+function StarburstIcon({ size = 96 }: { size?: number }) {
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 100 100"
+      viewBox="0 0 200 200"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
         filter:
-          "drop-shadow(0 0 6px #3BB5FF) drop-shadow(0 0 12px rgba(255,107,26,1)) drop-shadow(0 0 28px rgba(255,107,26,0.55)) drop-shadow(0 0 5px rgba(59,181,255,0.8))",
+          "drop-shadow(0 0 10px #FF4400) drop-shadow(0 0 20px rgba(255,68,0,0.65)) drop-shadow(0 0 8px #3BB5FF) drop-shadow(0 0 16px rgba(59,181,255,0.5))",
         flexShrink: 0,
       }}
     >
-      {/* ── POINT 1: TOP — electric blue ── */}
-      {/* outer glow */}
-      <polygon points="50,50 46,5 54,5" fill="#3BB5FF" opacity="0.35" />
-      {/* core tube */}
-      <polygon points="50,50 48,8 52,8" fill="#3BB5FF" />
-      {/* bright highlight center line */}
-      <polygon points="50,50 49.3,6 50.7,6" fill="#B8E8FF" opacity="0.9" />
+      {/* ── CARDINAL POINTS — DEEP RED-ORANGE — wide flat diamond lozenges ── */}
+      {/* Each cardinal lozenge: tip at edge, wide belly ~20px across at center */}
 
-      {/* ── POINT 2: TOP-RIGHT — deep orange ── */}
-      <polygon points="50,50 83,17 87,21" fill="#FF6B1A" opacity="0.35" />
-      <polygon points="50,50 81,20 84,23" fill="#FF6B1A" />
-      <polygon points="50,50 82,21 83,22" fill="#FFD0A0" opacity="0.85" />
+      {/* TOP lozenge: tip at (100,5), wide at center y=100 spanning x 80-120 */}
+      <polygon points="100,5 80,100 100,100 120,100" fill="#AA1800" />
+      <polygon points="100,5 82,100 118,100" fill="#EE3300" />
+      <polygon points="100,8 86,100 114,100" fill="#FF5500" />
+      <polygon points="100,12 90,100 110,100" fill="#FF8040" opacity="0.85" />
+      <polygon points="100,18 94,100 106,100" fill="#FFBB88" opacity="0.6" />
 
-      {/* ── POINT 3: RIGHT — light orange ── */}
-      <polygon points="50,50 95,46 95,54" fill="#FFB347" opacity="0.35" />
-      <polygon points="50,50 92,48 92,52" fill="#FFB347" />
-      <polygon points="50,50 93,49.3 93,50.7" fill="#FFE5B0" opacity="0.85" />
+      {/* BOTTOM lozenge: tip at (100,195), wide at center y=100 */}
+      <polygon points="100,195 80,100 100,100 120,100" fill="#AA1800" />
+      <polygon points="100,195 82,100 118,100" fill="#EE3300" />
+      <polygon points="100,192 86,100 114,100" fill="#FF5500" />
+      <polygon points="100,188 90,100 110,100" fill="#FF8040" opacity="0.85" />
+      <polygon points="100,182 94,100 106,100" fill="#FFBB88" opacity="0.6" />
 
-      {/* ── POINT 4: BOTTOM-RIGHT — electric blue ── */}
-      <polygon points="50,50 83,83 79,87" fill="#3BB5FF" opacity="0.35" />
-      <polygon points="50,50 81,80 78,83" fill="#3BB5FF" />
-      <polygon points="50,50 80,81 79,82" fill="#B8E8FF" opacity="0.85" />
+      {/* LEFT lozenge: tip at (5,100), wide at center x=100 spanning y 80-120 */}
+      <polygon points="5,100 100,80 100,100 100,120" fill="#AA1800" />
+      <polygon points="5,100 100,82 100,118" fill="#EE3300" />
+      <polygon points="8,100 100,86 100,114" fill="#FF5500" />
+      <polygon points="12,100 100,90 100,110" fill="#FF8040" opacity="0.85" />
+      <polygon points="18,100 100,94 100,106" fill="#FFBB88" opacity="0.6" />
 
-      {/* ── POINT 5: BOTTOM — deep orange ── */}
-      <polygon points="50,50 46,95 54,95" fill="#FF6B1A" opacity="0.35" />
-      <polygon points="50,50 48,92 52,92" fill="#E85500" />
-      <polygon points="50,50 49.3,94 50.7,94" fill="#FFD0A0" opacity="0.85" />
+      {/* RIGHT lozenge: tip at (195,100), wide at center x=100 */}
+      <polygon points="195,100 100,80 100,100 100,120" fill="#AA1800" />
+      <polygon points="195,100 100,82 100,118" fill="#EE3300" />
+      <polygon points="192,100 100,86 100,114" fill="#FF5500" />
+      <polygon points="188,100 100,90 100,110" fill="#FF8040" opacity="0.85" />
+      <polygon points="182,100 100,94 100,106" fill="#FFBB88" opacity="0.6" />
 
-      {/* ── POINT 6: BOTTOM-LEFT — light orange ── */}
-      <polygon points="50,50 17,83 13,79" fill="#FFB347" opacity="0.35" />
-      <polygon points="50,50 19,80 22,77" fill="#FFB347" />
-      <polygon points="50,50 20,79 21,78" fill="#FFE5B0" opacity="0.85" />
+      {/* ── DIAGONAL POINTS — ELECTRIC BLUE — wide flat diamond lozenges ── */}
+      {/* Each diagonal lozenge: tip at corner, wide belly ~14px across at center */}
 
-      {/* ── POINT 7: LEFT — electric blue ── */}
-      <polygon points="50,50 5,46 5,54" fill="#3BB5FF" opacity="0.35" />
-      <polygon points="50,50 8,48 8,52" fill="#3BB5FF" />
-      <polygon points="50,50 7,49.3 7,50.7" fill="#B8E8FF" opacity="0.85" />
+      {/* TOP-RIGHT: tip at (178,22), wide at center */}
+      <polygon points="178,22 90,90 100,100 110,90" fill="#0A5A99" />
+      <polygon points="178,22 92,92 108,92" fill="#1A80CC" />
+      <polygon points="175,25 94,94 106,94" fill="#2A9FE8" />
+      <polygon points="170,30 96,96 104,96" fill="#3BB5FF" />
+      <polygon points="163,37 98,98 102,98" fill="#88CCFF" opacity="0.75" />
 
-      {/* ── POINT 8: TOP-LEFT — deep orange ── */}
-      <polygon points="50,50 17,17 21,13" fill="#FF6B1A" opacity="0.35" />
-      <polygon points="50,50 20,20 23,17" fill="#FF6B1A" />
-      <polygon points="50,50 21,21 22,20" fill="#FFD0A0" opacity="0.85" />
+      {/* TOP-LEFT: tip at (22,22) */}
+      <polygon points="22,22 90,90 100,100 90,110" fill="#0A5A99" />
+      <polygon points="22,22 92,92 92,108" fill="#1A80CC" />
+      <polygon points="25,25 94,94 94,106" fill="#2A9FE8" />
+      <polygon points="30,30 96,96 96,104" fill="#3BB5FF" />
+      <polygon points="37,37 98,98 98,102" fill="#88CCFF" opacity="0.75" />
 
-      {/* ── CENTER GLOW — white-hot core ── */}
-      <circle cx="50" cy="50" r="9" fill="#FF6B1A" opacity="0.9" />
-      <circle cx="50" cy="50" r="6" fill="#FFD580" />
-      <circle cx="50" cy="50" r="3.5" fill="#FFFBE8" />
-      <circle cx="50" cy="50" r="1.5" fill="#FFFFFF" />
+      {/* BOTTOM-RIGHT: tip at (178,178) */}
+      <polygon points="178,178 110,110 100,100 90,110" fill="#0A5A99" />
+      <polygon points="178,178 108,108 92,108" fill="#1A80CC" />
+      <polygon points="175,175 106,106 94,106" fill="#2A9FE8" />
+      <polygon points="170,170 104,104 96,104" fill="#3BB5FF" />
+      <polygon points="163,163 102,102 98,102" fill="#88CCFF" opacity="0.75" />
+
+      {/* BOTTOM-LEFT: tip at (22,178) */}
+      <polygon points="22,178 110,110 100,100 110,90" fill="#0A5A99" />
+      <polygon points="22,178 108,108 108,92" fill="#1A80CC" />
+      <polygon points="25,175 106,106 106,94" fill="#2A9FE8" />
+      <polygon points="30,170 104,104 104,96" fill="#3BB5FF" />
+      <polygon points="37,163 102,102 102,98" fill="#88CCFF" opacity="0.75" />
+
+      {/* ── CENTER — white-hot core ── */}
+      <circle cx="100" cy="100" r="14" fill="#AA1800" />
+      <circle cx="100" cy="100" r="10" fill="#FF4400" />
+      <circle cx="100" cy="100" r="7" fill="#FF8844" />
+      <circle cx="100" cy="100" r="4" fill="#FFD580" />
+      <circle cx="100" cy="100" r="2" fill="#FFFFFF" />
     </svg>
   );
 }
@@ -370,15 +389,27 @@ export default function Home() {
               justifyContent: "flex-start",
             }}
           >
-            {/* Colorful starburst — fills the full height of the two-line subhead block */}
-            <StarburstIcon size={96} />
+            {/* Colorful starburst — generated image matching the sign's starburst exactly */}
+            <img
+              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-starburst-icon-3QrLS7GAvxaRifYUTu3BpD.webp"
+              alt="Atomic starburst"
+              style={{
+                width: "110px",
+                height: "110px",
+                objectFit: "contain",
+                flexShrink: 0,
+                mixBlendMode: "screen",
+                filter:
+                  "drop-shadow(0 0 8px rgba(255,107,26,0.7)) drop-shadow(0 0 14px rgba(59,181,255,0.5)) brightness(1.15) saturate(1.2)",
+              }}
+            />
             {/* Stacked subhead — Rev2: doubled font size, right-justified under VEGAS */}
             <div
               style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "clamp(2.8rem, 5.2vw, 4.6rem)",
+                fontSize: "clamp(3.2rem, 6vw, 5.4rem)",
                 lineHeight: 1.0,
-                letterSpacing: "0.06em",
+                letterSpacing: "0.08em",
                 color: "#FF6B1A",
                 textAlign: "right",
                 marginLeft: "auto",
