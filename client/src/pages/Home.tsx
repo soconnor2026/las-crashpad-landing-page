@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 
 // ── Asset URLs (webdev lifecycle-persistent) ──────────────────────────────────
 const NEON_SIGN_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-rev5-doSZB3FzuBLb2MjJjNU9gQ.webp";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-rev6-DGCyDQeCBRBbdrN3JGHPsz.webp";
 
 const STARBURST_ICON_URL =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-starburst-v4-E7cMPJmnZY9P59jfR4tihr.webp";
@@ -259,14 +259,17 @@ export default function Home() {
           display: "flex",
           minHeight: "100vh",
           paddingTop: "56px",
+          alignItems: "flex-start",
         }}
       >
-        {/* ── LEFT PANEL: neon sign ─────────────────────────────── */}
+        {/* ── LEFT PANEL: neon sign — STICKY, floats over scrolling content ── */}
         <div
           style={{
             width: "45%",
             flexShrink: 0,
-            position: "relative",
+            position: "sticky",
+            top: "56px",
+            height: "calc(100vh - 56px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -289,29 +292,20 @@ export default function Home() {
             }}
           />
 
-          {/* Sign wrapper — multi-layer amber glow matching original */}
-          <div style={{ position: "relative", width: "100%", maxWidth: "380px" }}>
-            {/* Wide atmospheric haze */}
+          {/* Sign — floating directly on the panel, no frame wrapper */}
+          <div style={{ position: "relative", width: "100%", maxWidth: "400px" }}>
+            {/* Wide atmospheric haze behind sign */}
             <div
               style={{
                 position: "absolute",
-                inset: "-50px",
+                inset: "-60px",
                 background:
-                  "radial-gradient(ellipse at center, rgba(255,120,20,0.18) 0%, rgba(255,80,0,0.07) 45%, transparent 70%)",
+                  "radial-gradient(ellipse at center, rgba(255,120,20,0.15) 0%, rgba(255,80,0,0.05) 50%, transparent 72%)",
                 pointerEvents: "none",
+                zIndex: 0,
               }}
             />
-            {/* Mid-range glow box */}
-            <div
-              style={{
-                position: "absolute",
-                inset: "-10px",
-                boxShadow:
-                  "0 0 35px rgba(255,107,26,0.5), 0 0 70px rgba(255,107,26,0.22), 0 0 130px rgba(255,107,26,0.08)",
-                pointerEvents: "none",
-              }}
-            />
-            {/* The sign — floating on pure black, no poles */}
+            {/* The sign — mix-blend-mode:screen makes black areas transparent, eliminating any baked-in frame */}
             <img
               src={NEON_SIGN_URL}
               alt="Welcome to Fabulous — The LAS Crashpad, Las Vegas Nevada neon sign"
@@ -321,8 +315,8 @@ export default function Home() {
                 height: "auto",
                 position: "relative",
                 zIndex: 1,
-                filter:
-                  "drop-shadow(0 0 12px rgba(255,107,26,0.7)) drop-shadow(0 0 30px rgba(255,107,26,0.3)) brightness(1.05) contrast(1.03) saturate(1.08)",
+                mixBlendMode: "screen",
+                filter: "brightness(1.08) contrast(1.05) saturate(1.12)",
               }}
             />
           </div>
@@ -338,7 +332,7 @@ export default function Home() {
             padding: "3rem 3rem 3rem 2.75rem",
             minWidth: 0,
             background:
-              "linear-gradient(120deg, rgba(255,107,26,0.025) 0%, transparent 55%), #0D0D0D",
+              "linear-gradient(120deg, rgba(255,107,26,0.025) 0%, transparent 55%), #0A0A0A",
           }}
         >
           {/* MAIN HEADLINE — Rev2: larger to fill full right column width */}
@@ -575,7 +569,7 @@ export default function Home() {
           alignItems: "center",
           padding: "0.6rem 0 2rem",
           gap: "0.3rem",
-          backgroundColor: "#0D0D0D",
+          backgroundColor: "#16161A",
         }}
       >
         <span
@@ -613,7 +607,7 @@ export default function Home() {
       <section
         id="rooms"
         style={{
-          backgroundColor: "#111111",
+          backgroundColor: "#16161A",
           padding: "5rem 3.5rem",
           borderTop: "1px solid rgba(255,107,26,0.2)",
         }}
@@ -658,7 +652,7 @@ export default function Home() {
               <div
                 key={room.name}
                 style={{
-                  backgroundColor: "#0A0A0A",
+                  backgroundColor: "#0D0D10",
                   border: "1px solid rgba(255,107,26,0.2)",
                   padding: "1.9rem",
                   position: "relative",
@@ -778,7 +772,7 @@ export default function Home() {
       <section
         id="testimonials"
         style={{
-          backgroundColor: "#0D0D0D",
+          backgroundColor: "#1A1A20",
           padding: "5rem 3.5rem",
           borderTop: "1px solid rgba(59,181,255,0.15)",
         }}
@@ -823,7 +817,7 @@ export default function Home() {
               <div
                 key={t.name}
                 style={{
-                  backgroundColor: "#111111",
+                  backgroundColor: "#16161A",
                   border: "1px solid rgba(59,181,255,0.18)",
                   padding: "1.9rem",
                   transition: "border-color 200ms ease, box-shadow 200ms ease",
@@ -897,7 +891,7 @@ export default function Home() {
       ═══════════════════════════════════════════════════════════ */}
       <footer
         style={{
-          backgroundColor: "#080808",
+          backgroundColor: "#16161A",
           borderTop: "1px solid rgba(255,107,26,0.22)",
           padding: "1.75rem 3.5rem",
           display: "flex",
