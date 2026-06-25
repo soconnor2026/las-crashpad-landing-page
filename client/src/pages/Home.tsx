@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 
 // ── Asset URLs (webdev lifecycle-persistent) ──────────────────────────────────
 const NEON_SIGN_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-rev4-neEXjjX76cayTgxWCSpcDP.webp";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-rev5-doSZB3FzuBLb2MjJjNU9gQ.webp";
 
 const STARBURST_ICON_URL =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-starburst-v4-E7cMPJmnZY9P59jfR4tihr.webp";
