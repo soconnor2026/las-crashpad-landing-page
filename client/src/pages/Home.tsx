@@ -1,23 +1,24 @@
 /**
  * LAS CRASHPAD — Home Page
  * Design: Desert Electric / Neo-Vegas Brutalism
- * Colors: #FF6B1A (neon orange), #3BB5FF (electric blue), #FF2D78 (hot magenta), #F5EDD6 (cream), #0D0D0D (near-black)
- * Fonts: Bebas Neue (display), DM Sans (body)
- * Rev4 Changes: Updated body copy, 8-item bullet list (blue markers, orange text), 1.3rem body font
+ * Reference: Original design screenshot — classic Welcome to Las Vegas sign shield shape
+ *            adapted with City of Las Vegas modern neon palette
+ * Colors: #FF6B1A (neon orange), #3BB5FF (electric blue), #FF2D78 (hot magenta),
+ *         #F5EDD6 (cream/warm white), #0A0A0A (near-black bg)
+ * Fonts: Bebas Neue (display/headlines), DM Sans (body)
+ * Rev4: Updated body copy, 8-item bullet list (blue markers, orange text), 1.3rem body font
  */
 
 import { useEffect, useRef, useState } from "react";
 
+// ── Asset URLs (webdev lifecycle-persistent) ──────────────────────────────────
 const NEON_SIGN_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-neon-v2-az5vxX2ovP56JXpRkSEHzg.webp";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-sign-v4-Dz3dXK3zzagsL6LFndEFQm.webp";
 
-const STARBURST_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-starburst-v2-LpziXo2LMeDauRpZ7aUEov.webp";
+const LOGO_URL =
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-logo-v3-bGdVrsRMxWRPNqra85PcJv.webp";
 
-const LOGO_MARK_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663735722758/9mdJhhBhuJpzatBnjm7SYm/las-crashpad-starburst-v2-LpziXo2LMeDauRpZ7aUEov.webp";
-
-// Rev4: 8 benefit bullets
+// ── Rev4: 8 benefit bullets ───────────────────────────────────────────────────
 const BENEFITS = [
   "Best price",
   "Nicest rooms",
@@ -75,9 +76,42 @@ const TESTIMONIALS = [
   },
 ];
 
+// ── Inline starburst SVG (matches original — orange body, blue top points) ────
+function StarburstIcon({ size = 56 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{
+        filter:
+          "drop-shadow(0 0 6px rgba(255,107,26,0.9)) drop-shadow(0 0 14px rgba(255,107,26,0.4))",
+        flexShrink: 0,
+      }}
+    >
+      {/* Orange points (all except top two) */}
+      <polygon points="50,50 46,8 54,8" fill="#FF6B1A" />
+      <polygon points="50,50 8,46 8,54" fill="#FF6B1A" />
+      <polygon points="50,50 92,46 92,54" fill="#FF6B1A" />
+      <polygon points="50,50 54,92 46,92" fill="#FF6B1A" />
+      <polygon points="50,50 18,18 22,14" fill="#FF6B1A" />
+      <polygon points="50,50 82,18 78,14" fill="#FF6B1A" />
+      <polygon points="50,50 18,82 14,78" fill="#FF6B1A" />
+      <polygon points="50,50 82,82 86,78" fill="#FF6B1A" />
+      {/* Blue top two points */}
+      <polygon points="50,50 38,4 44,2" fill="#3BB5FF" />
+      <polygon points="50,50 62,4 56,2" fill="#3BB5FF" />
+      {/* Center circle */}
+      <circle cx="50" cy="50" r="7" fill="#FF6B1A" />
+      <circle cx="50" cy="50" r="4" fill="#FFF0D0" />
+    </svg>
+  );
+}
+
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
-  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -99,9 +133,9 @@ export default function Home() {
         fontFamily: "'DM Sans', sans-serif",
       }}
     >
-      {/* ═══════════════════════════════════════════
+      {/* ═══════════════════════════════════════════════════════════
           NAV
-      ═══════════════════════════════════════════ */}
+      ═══════════════════════════════════════════════════════════ */}
       <nav
         style={{
           position: "fixed",
@@ -109,39 +143,38 @@ export default function Home() {
           left: 0,
           right: 0,
           zIndex: 100,
-          height: "58px",
+          height: "56px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "0 2rem",
+          padding: "0 1.75rem",
           backgroundColor: scrolled
-            ? "rgba(10,10,10,0.98)"
-            : "rgba(10,10,10,0.85)",
-          borderBottom: scrolled
-            ? "1px solid rgba(255,107,26,0.3)"
-            : "1px solid rgba(255,107,26,0.08)",
-          backdropFilter: "blur(12px)",
-          transition: "all 250ms ease",
+            ? "rgba(10,10,10,0.97)"
+            : "rgba(10,10,10,0.88)",
+          borderBottom: "1px solid rgba(255,107,26,0.18)",
+          backdropFilter: "blur(14px)",
+          transition: "background-color 250ms ease, border-color 250ms ease",
         }}
       >
-        {/* Logo + wordmark */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
+        {/* Logo mark + wordmark */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
           <img
-            src={LOGO_MARK_URL}
-            alt=""
+            src={LOGO_URL}
+            alt="The LAS Crashpad logo"
             style={{
-              width: "30px",
-              height: "30px",
+              width: "32px",
+              height: "32px",
               objectFit: "contain",
-              filter: "drop-shadow(0 0 6px rgba(255,107,26,0.7))",
+              filter:
+                "drop-shadow(0 0 5px rgba(255,107,26,0.7)) drop-shadow(0 0 10px rgba(255,107,26,0.3))",
             }}
           />
           <span
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontWeight: 600,
-              fontSize: "0.8rem",
-              letterSpacing: "0.15em",
+              fontSize: "0.78rem",
+              letterSpacing: "0.18em",
               color: "#F5EDD6",
               textTransform: "uppercase",
             }}
@@ -150,28 +183,29 @@ export default function Home() {
           </span>
         </div>
 
-        {/* BOOK NOW */}
+        {/* BOOK NOW button */}
         <button
           onClick={scrollToRooms}
           style={{
             backgroundColor: "#FF2D78",
             color: "#fff",
             fontFamily: "'Bebas Neue', sans-serif",
-            letterSpacing: "0.1em",
+            letterSpacing: "0.12em",
             fontSize: "1rem",
-            padding: "0.4rem 1.5rem",
+            padding: "0.38rem 1.6rem",
             border: "none",
             cursor: "pointer",
-            boxShadow: "0 0 16px rgba(255,45,120,0.5), 0 0 4px rgba(255,45,120,0.8)",
+            boxShadow:
+              "0 0 14px rgba(255,45,120,0.55), 0 0 4px rgba(255,45,120,0.9)",
             transition: "box-shadow 150ms ease, transform 120ms ease",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.boxShadow =
-              "0 0 28px rgba(255,45,120,0.7), 0 0 8px rgba(255,45,120,1)";
+              "0 0 26px rgba(255,45,120,0.75), 0 0 8px rgba(255,45,120,1)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.boxShadow =
-              "0 0 16px rgba(255,45,120,0.5), 0 0 4px rgba(255,45,120,0.8)";
+              "0 0 14px rgba(255,45,120,0.55), 0 0 4px rgba(255,45,120,0.9)";
           }}
           onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
           onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
@@ -180,33 +214,33 @@ export default function Home() {
         </button>
       </nav>
 
-      {/* ═══════════════════════════════════════════
-          HERO — asymmetric split
-      ═══════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════
+          HERO — asymmetric split matching original proportions
+          Left ~45% | Right ~55%
+      ═══════════════════════════════════════════════════════════ */}
       <section
-        ref={heroRef}
         style={{
           display: "flex",
           minHeight: "100vh",
-          paddingTop: "58px",
+          paddingTop: "56px",
         }}
       >
-        {/* ── LEFT PANEL: neon sign ── */}
+        {/* ── LEFT PANEL: neon sign ─────────────────────────────── */}
         <div
           style={{
-            width: "42%",
+            width: "45%",
             flexShrink: 0,
             position: "relative",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: "3rem 2rem 3rem 3rem",
-            /* Deep warm-black panel with subtle radial glow from the sign */
+            padding: "2.5rem 1.5rem 2.5rem 2.5rem",
+            /* Warm radial glow emanating from the sign */
             background:
-              "radial-gradient(ellipse 80% 70% at 50% 55%, rgba(180,70,10,0.18) 0%, rgba(10,10,10,0) 70%), #0A0A0A",
+              "radial-gradient(ellipse 75% 65% at 50% 52%, rgba(160,60,5,0.22) 0%, rgba(10,10,10,0) 68%), #0A0A0A",
           }}
         >
-          {/* Vertical amber border line on the right edge of the left panel */}
+          {/* Right-edge amber divider line */}
           <div
             style={{
               position: "absolute",
@@ -215,119 +249,98 @@ export default function Home() {
               width: "1px",
               height: "100%",
               background:
-                "linear-gradient(to bottom, transparent 0%, rgba(255,107,26,0.6) 20%, rgba(255,107,26,0.9) 50%, rgba(255,107,26,0.6) 80%, transparent 100%)",
+                "linear-gradient(to bottom, transparent 0%, rgba(255,107,26,0.55) 15%, rgba(255,140,40,0.85) 50%, rgba(255,107,26,0.55) 85%, transparent 100%)",
             }}
           />
 
-          {/* Sign container with multi-layer amber glow */}
-          <div
-            style={{
-              position: "relative",
-              maxWidth: "400px",
-              width: "100%",
-            }}
-          >
-            {/* Outer atmospheric glow — wide, soft */}
+          {/* Sign wrapper — multi-layer amber glow matching original */}
+          <div style={{ position: "relative", width: "100%", maxWidth: "380px" }}>
+            {/* Wide atmospheric haze */}
             <div
               style={{
                 position: "absolute",
-                inset: "-40px",
-                borderRadius: "4px",
+                inset: "-50px",
                 background:
-                  "radial-gradient(ellipse at center, rgba(255,120,20,0.22) 0%, rgba(255,80,0,0.08) 50%, transparent 75%)",
+                  "radial-gradient(ellipse at center, rgba(255,120,20,0.18) 0%, rgba(255,80,0,0.07) 45%, transparent 70%)",
                 pointerEvents: "none",
               }}
             />
-            {/* Mid glow ring */}
+            {/* Mid-range glow box */}
             <div
               style={{
                 position: "absolute",
-                inset: "-16px",
-                borderRadius: "2px",
+                inset: "-10px",
                 boxShadow:
-                  "0 0 40px rgba(255,107,26,0.45), 0 0 80px rgba(255,107,26,0.2), 0 0 160px rgba(255,107,26,0.08)",
+                  "0 0 35px rgba(255,107,26,0.5), 0 0 70px rgba(255,107,26,0.22), 0 0 130px rgba(255,107,26,0.08)",
                 pointerEvents: "none",
               }}
             />
-            {/* The sign image */}
+            {/* The sign — floating on pure black, no poles */}
             <img
               src={NEON_SIGN_URL}
-              alt="Welcome to Fabulous The LAS Crashpad Las Vegas Nevada neon sign"
+              alt="Welcome to Fabulous — The LAS Crashpad, Las Vegas Nevada neon sign"
               style={{
                 display: "block",
                 width: "100%",
                 height: "auto",
                 position: "relative",
                 zIndex: 1,
-                /* Tight inner glow on the image itself */
                 filter:
-                  "drop-shadow(0 0 12px rgba(255,107,26,0.6)) drop-shadow(0 0 30px rgba(255,107,26,0.25)) brightness(1.05) contrast(1.05)",
+                  "drop-shadow(0 0 12px rgba(255,107,26,0.7)) drop-shadow(0 0 30px rgba(255,107,26,0.3)) brightness(1.05) contrast(1.03) saturate(1.08)",
               }}
             />
           </div>
         </div>
 
-        {/* ── RIGHT PANEL: headline + content ── */}
+        {/* ── RIGHT PANEL: headline + content ──────────────────── */}
         <div
           style={{
             flex: 1,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            padding: "3.5rem 3.5rem 3.5rem 3rem",
+            padding: "3rem 3rem 3rem 2.75rem",
             minWidth: 0,
-            /* Subtle dark texture — slightly lighter than left panel */
             background:
-              "linear-gradient(135deg, rgba(255,107,26,0.03) 0%, transparent 60%), #0D0D0D",
+              "linear-gradient(120deg, rgba(255,107,26,0.025) 0%, transparent 55%), #0D0D0D",
           }}
         >
-          {/* ── MAIN HEADLINE ── */}
+          {/* MAIN HEADLINE — fills the full right column width */}
           <h1
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(2.8rem, 5.5vw, 5.2rem)",
-              lineHeight: 1,
-              letterSpacing: "0.02em",
+              fontSize: "clamp(3.5rem, 6.5vw, 5.8rem)",
+              lineHeight: 0.95,
+              letterSpacing: "0.025em",
               color: "#F5EDD6",
-              margin: 0,
-              /* Multi-layer text shadow for electric depth */
+              margin: "0 0 0.9rem 0",
+              whiteSpace: "nowrap",
               textShadow:
-                "0 0 1px rgba(245,237,214,1), 0 0 8px rgba(245,237,214,0.5), 0 0 20px rgba(245,237,214,0.2), 0 2px 0 rgba(0,0,0,0.8)",
+                "0 0 1px rgba(245,237,214,1), 0 0 10px rgba(245,237,214,0.35), 0 0 30px rgba(245,237,214,0.12), 0 2px 0 rgba(0,0,0,0.9)",
             }}
           >
             BEST VALUE IN VEGAS
           </h1>
 
-          {/* ── SUBHEADLINE with starburst ── */}
+          {/* SUBHEADLINE with starburst icon */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "0.85rem",
-              marginTop: "1rem",
+              gap: "0.8rem",
+              marginBottom: "1.6rem",
             }}
           >
-            <img
-              src={STARBURST_URL}
-              alt=""
-              style={{
-                width: "56px",
-                height: "56px",
-                objectFit: "contain",
-                flexShrink: 0,
-                filter:
-                  "drop-shadow(0 0 8px rgba(255,107,26,0.9)) drop-shadow(0 0 20px rgba(255,107,26,0.4))",
-              }}
-            />
+            <StarburstIcon size={52} />
             <div
               style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
+                fontSize: "clamp(1.75rem, 3.2vw, 2.6rem)",
                 lineHeight: 1.05,
-                letterSpacing: "0.05em",
+                letterSpacing: "0.06em",
                 color: "#FF6B1A",
                 textShadow:
-                  "0 0 8px rgba(255,107,26,0.9), 0 0 20px rgba(255,107,26,0.5), 0 0 40px rgba(255,107,26,0.2)",
+                  "0 0 8px rgba(255,107,26,0.95), 0 0 20px rgba(255,107,26,0.5), 0 0 40px rgba(255,107,26,0.2)",
               }}
             >
               ONLY MINUTES
@@ -336,31 +349,32 @@ export default function Home() {
             </div>
           </div>
 
-          {/* ── Rev4: BODY COPY — 1.3rem, cream, stretches full width ── */}
+          {/* Rev4: BODY COPY — 1.3rem, cream white */}
           <p
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "1.3rem",
               lineHeight: 1.6,
               color: "#F5EDD6",
-              marginTop: "1.75rem",
-              marginBottom: 0,
+              margin: "0 0 1.5rem 0",
               maxWidth: "100%",
-              opacity: 0.92,
+              opacity: 0.93,
             }}
           >
-            We know you are busy professionals. Your time to shop for a Crashpad room is limited. Start with the best. Move into the best.
+            We know you are busy professionals. Your time to shop for a Crashpad
+            room is limited. Start with the best. Move into the best.
           </p>
 
-          {/* ── Rev4: BENEFITS BULLET LIST ── */}
+          {/* Rev4: BULLET BENEFITS LIST — blue markers, orange text */}
           <ul
             style={{
               listStyle: "none",
               padding: 0,
-              margin: "1.5rem 0 0 0",
+              margin: "0 0 1.75rem 0",
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
-              gap: "0.4rem 2.5rem",
+              gap: "0.5rem 2.5rem",
+              alignItems: "start",
             }}
           >
             {BENEFITS.map((item) => (
@@ -368,32 +382,30 @@ export default function Home() {
                 key={item}
                 style={{
                   display: "flex",
-                  alignItems: "baseline",
-                  gap: "0.55rem",
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "1.05rem",
-                  lineHeight: 1.5,
+                  alignItems: "flex-start",
+                  gap: "0.5rem",
+              fontFamily: "'DM Sans', sans-serif",
+                fontSize: "0.92rem",
+                lineHeight: 1.45,
                 }}
               >
-                {/* Blue bullet marker */}
                 <span
                   style={{
                     color: "#3BB5FF",
-                    fontSize: "1.15rem",
+                    fontSize: "1.2rem",
+                    lineHeight: 1.4,
                     flexShrink: 0,
-                    lineHeight: 1,
                     textShadow:
-                      "0 0 6px rgba(59,181,255,0.9), 0 0 14px rgba(59,181,255,0.4)",
+                      "0 0 6px rgba(59,181,255,0.95), 0 0 14px rgba(59,181,255,0.45)",
                   }}
                 >
                   •
                 </span>
-                {/* Orange item text */}
                 <span
                   style={{
                     color: "#FF6B1A",
                     fontWeight: 500,
-                    textShadow: "0 0 8px rgba(255,107,26,0.3)",
+                    textShadow: "0 0 8px rgba(255,107,26,0.25)",
                   }}
                 >
                   {item}
@@ -402,16 +414,15 @@ export default function Home() {
             ))}
           </ul>
 
-          {/* ── CTA BUTTONS ── */}
+          {/* CTA BUTTONS */}
           <div
             style={{
               display: "flex",
               gap: "1rem",
-              marginTop: "1.75rem",
               flexWrap: "wrap",
+              marginBottom: "2.25rem",
             }}
           >
-            {/* Primary — solid orange */}
             <button
               onClick={scrollToRooms}
               style={{
@@ -420,31 +431,33 @@ export default function Home() {
                 fontFamily: "'Bebas Neue', sans-serif",
                 letterSpacing: "0.1em",
                 fontSize: "1.05rem",
-                padding: "0.85rem 2rem",
+                padding: "0.82rem 2.1rem",
                 border: "none",
                 cursor: "pointer",
                 fontWeight: 700,
                 boxShadow:
-                  "0 0 16px rgba(255,107,26,0.5), inset 0 1px 0 rgba(255,255,255,0.15)",
-                transition: "box-shadow 150ms ease, transform 120ms ease, background-color 150ms ease",
+                  "0 0 16px rgba(255,107,26,0.5), inset 0 1px 0 rgba(255,255,255,0.18)",
+                transition:
+                  "box-shadow 150ms ease, transform 120ms ease, background-color 150ms ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#ff7d35";
+                e.currentTarget.style.backgroundColor = "#ff7c30";
                 e.currentTarget.style.boxShadow =
-                  "0 0 28px rgba(255,107,26,0.7), inset 0 1px 0 rgba(255,255,255,0.2)";
+                  "0 0 28px rgba(255,107,26,0.72), inset 0 1px 0 rgba(255,255,255,0.22)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "#FF6B1A";
                 e.currentTarget.style.boxShadow =
-                  "0 0 16px rgba(255,107,26,0.5), inset 0 1px 0 rgba(255,255,255,0.15)";
+                  "0 0 16px rgba(255,107,26,0.5), inset 0 1px 0 rgba(255,255,255,0.18)";
               }}
-              onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
+              onMouseDown={(e) =>
+                (e.currentTarget.style.transform = "scale(0.97)")
+              }
               onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
             >
               CHECK AVAILABILITY
             </button>
 
-            {/* Secondary — outlined */}
             <button
               onClick={scrollToTestimonials}
               style={{
@@ -453,36 +466,40 @@ export default function Home() {
                 fontFamily: "'Bebas Neue', sans-serif",
                 letterSpacing: "0.1em",
                 fontSize: "1.05rem",
-                padding: "0.85rem 2rem",
+                padding: "0.82rem 2.1rem",
                 border: "2px solid #FF6B1A",
                 cursor: "pointer",
-                boxShadow: "0 0 10px rgba(255,107,26,0.15)",
+                boxShadow: "0 0 8px rgba(255,107,26,0.12)",
                 transition: "all 150ms ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(255,107,26,0.1)";
-                e.currentTarget.style.boxShadow = "0 0 20px rgba(255,107,26,0.3)";
+                e.currentTarget.style.backgroundColor =
+                  "rgba(255,107,26,0.1)";
+                e.currentTarget.style.boxShadow =
+                  "0 0 20px rgba(255,107,26,0.3)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
-                e.currentTarget.style.boxShadow = "0 0 10px rgba(255,107,26,0.15)";
+                e.currentTarget.style.boxShadow =
+                  "0 0 8px rgba(255,107,26,0.12)";
               }}
-              onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
+              onMouseDown={(e) =>
+                (e.currentTarget.style.transform = "scale(0.97)")
+              }
               onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
             >
               WHAT CREW MEMBERS ARE SAYING
             </button>
           </div>
 
-          {/* ── TRUST BAR STATS ── */}
+          {/* TRUST BAR STATS */}
           <div
             style={{
               display: "flex",
               gap: "2.5rem",
-              marginTop: "2.5rem",
               flexWrap: "wrap",
-              paddingTop: "2rem",
-              borderTop: "1px solid rgba(255,107,26,0.2)",
+              paddingTop: "1.75rem",
+              borderTop: "1px solid rgba(255,107,26,0.22)",
             }}
           >
             {STATS.map((s) => (
@@ -490,12 +507,12 @@ export default function Home() {
                 <div
                   style={{
                     fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "1.7rem",
+                    fontSize: "1.65rem",
                     letterSpacing: "0.04em",
                     color: "#FF6B1A",
                     lineHeight: 1,
                     textShadow:
-                      "0 0 10px rgba(255,107,26,0.6), 0 0 20px rgba(255,107,26,0.2)",
+                      "0 0 10px rgba(255,107,26,0.65), 0 0 22px rgba(255,107,26,0.22)",
                   }}
                 >
                   {s.value}
@@ -503,11 +520,11 @@ export default function Home() {
                 <div
                   style={{
                     fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "0.68rem",
-                    letterSpacing: "0.14em",
+                    fontSize: "0.67rem",
+                    letterSpacing: "0.15em",
                     color: "#F5EDD6",
-                    opacity: 0.55,
-                    marginTop: "0.25rem",
+                    opacity: 0.5,
+                    marginTop: "0.22rem",
                     textTransform: "uppercase",
                   }}
                 >
@@ -519,30 +536,36 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── SCROLL INDICATOR ── */}
+      {/* SCROLL INDICATOR */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "0.75rem 0 2.5rem",
-          gap: "0.35rem",
+          padding: "0.6rem 0 2rem",
+          gap: "0.3rem",
           backgroundColor: "#0D0D0D",
         }}
       >
         <span
           style={{
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: "0.65rem",
-            letterSpacing: "0.25em",
+            fontSize: "0.62rem",
+            letterSpacing: "0.28em",
             color: "#F5EDD6",
-            opacity: 0.4,
+            opacity: 0.35,
             textTransform: "uppercase",
           }}
         >
           SCROLL
         </span>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ opacity: 0.35 }}>
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 16 16"
+          fill="none"
+          style={{ opacity: 0.3 }}
+        >
           <path
             d="M2 5L8 11L14 5"
             stroke="#F5EDD6"
@@ -553,29 +576,27 @@ export default function Home() {
         </svg>
       </div>
 
-      {/* ═══════════════════════════════════════════
+      {/* ═══════════════════════════════════════════════════════════
           ROOMS SECTION
-      ═══════════════════════════════════════════ */}
+      ═══════════════════════════════════════════════════════════ */}
       <section
         id="rooms"
         style={{
           backgroundColor: "#111111",
-          padding: "5.5rem 3.5rem",
+          padding: "5rem 3.5rem",
           borderTop: "1px solid rgba(255,107,26,0.2)",
         }}
       >
         <div style={{ maxWidth: "1140px", margin: "0 auto" }}>
-          {/* Section header */}
-          <div style={{ marginBottom: "3rem" }}>
+          <div style={{ marginBottom: "2.75rem" }}>
             <h2
               style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "clamp(2.8rem, 5vw, 4.5rem)",
+                fontSize: "clamp(2.6rem, 4.5vw, 4.2rem)",
                 color: "#F5EDD6",
                 letterSpacing: "0.03em",
                 margin: "0 0 0.5rem",
-                textShadow:
-                  "0 0 1px rgba(245,237,214,0.8), 0 0 20px rgba(245,237,214,0.1)",
+                textShadow: "0 0 1px rgba(245,237,214,0.7)",
               }}
             >
               CHOOSE YOUR ROOM
@@ -585,21 +606,21 @@ export default function Home() {
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "1rem",
                 color: "#F5EDD6",
-                opacity: 0.6,
-                maxWidth: "500px",
-                lineHeight: 1.65,
+                opacity: 0.58,
+                maxWidth: "480px",
+                lineHeight: 1.7,
               }}
             >
-              Every room is kept to a high standard of cleanliness and comfort. Pick the option that fits your schedule and budget.
+              Every room is kept to a high standard of cleanliness and comfort.
+              Pick the option that fits your schedule and budget.
             </p>
           </div>
 
-          {/* Room cards */}
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))",
-              gap: "1.5rem",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "1.4rem",
             }}
           >
             {ROOMS.map((room) => (
@@ -608,14 +629,14 @@ export default function Home() {
                 style={{
                   backgroundColor: "#0A0A0A",
                   border: "1px solid rgba(255,107,26,0.2)",
-                  padding: "2rem",
+                  padding: "1.9rem",
                   position: "relative",
                   transition: "border-color 200ms ease, box-shadow 200ms ease",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = "rgba(255,107,26,0.55)";
                   e.currentTarget.style.boxShadow =
-                    "0 0 30px rgba(255,107,26,0.1), inset 0 0 30px rgba(255,107,26,0.03)";
+                    "0 0 28px rgba(255,107,26,0.1), inset 0 0 28px rgba(255,107,26,0.03)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = "rgba(255,107,26,0.2)";
@@ -627,14 +648,14 @@ export default function Home() {
                     style={{
                       position: "absolute",
                       top: "-1px",
-                      right: "1.5rem",
+                      right: "1.4rem",
                       backgroundColor: "#FF6B1A",
                       color: "#0A0A0A",
                       fontFamily: "'Bebas Neue', sans-serif",
-                      fontSize: "0.75rem",
-                      letterSpacing: "0.12em",
-                      padding: "0.2rem 0.8rem",
-                      boxShadow: "0 0 12px rgba(255,107,26,0.5)",
+                      fontSize: "0.73rem",
+                      letterSpacing: "0.13em",
+                      padding: "0.18rem 0.75rem",
+                      boxShadow: "0 0 10px rgba(255,107,26,0.5)",
                     }}
                   >
                     {room.tag}
@@ -643,11 +664,11 @@ export default function Home() {
                 <h3
                   style={{
                     fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "2rem",
+                    fontSize: "1.9rem",
                     color: "#F5EDD6",
                     letterSpacing: "0.04em",
-                    margin: "0 0 0.75rem",
-                    textShadow: "0 0 1px rgba(245,237,214,0.6)",
+                    margin: "0 0 0.7rem",
+                    textShadow: "0 0 1px rgba(245,237,214,0.5)",
                   }}
                 >
                   {room.name}
@@ -655,11 +676,11 @@ export default function Home() {
                 <p
                   style={{
                     fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "0.92rem",
+                    fontSize: "0.9rem",
                     color: "#F5EDD6",
-                    opacity: 0.65,
-                    lineHeight: 1.7,
-                    marginBottom: "1.5rem",
+                    opacity: 0.62,
+                    lineHeight: 1.72,
+                    marginBottom: "1.4rem",
                   }}
                 >
                   {room.desc}
@@ -667,10 +688,10 @@ export default function Home() {
                 <div
                   style={{
                     fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "1.5rem",
+                    fontSize: "1.45rem",
                     color: "#FF6B1A",
                     letterSpacing: "0.04em",
-                    marginBottom: "1.5rem",
+                    marginBottom: "1.4rem",
                     textShadow: "0 0 8px rgba(255,107,26,0.4)",
                   }}
                 >
@@ -684,24 +705,33 @@ export default function Home() {
                     fontFamily: "'Bebas Neue', sans-serif",
                     letterSpacing: "0.1em",
                     fontSize: "1rem",
-                    padding: "0.8rem",
+                    padding: "0.78rem",
                     border: "none",
                     cursor: "pointer",
                     fontWeight: 700,
-                    boxShadow: "0 0 12px rgba(255,107,26,0.35)",
-                    transition: "background-color 150ms ease, box-shadow 150ms ease, transform 120ms ease",
+                    boxShadow: "0 0 10px rgba(255,107,26,0.35)",
+                    transition:
+                      "background-color 150ms ease, box-shadow 150ms ease, transform 120ms ease",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#ff7d35";
-                    e.currentTarget.style.boxShadow = "0 0 20px rgba(255,107,26,0.55)";
+                    e.currentTarget.style.backgroundColor = "#ff7c30";
+                    e.currentTarget.style.boxShadow =
+                      "0 0 18px rgba(255,107,26,0.55)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = "#FF6B1A";
-                    e.currentTarget.style.boxShadow = "0 0 12px rgba(255,107,26,0.35)";
+                    e.currentTarget.style.boxShadow =
+                      "0 0 10px rgba(255,107,26,0.35)";
                   }}
-                  onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
-                  onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
-                  onClick={() => window.open("mailto:info@lascraspad.com", "_blank")}
+                  onMouseDown={(e) =>
+                    (e.currentTarget.style.transform = "scale(0.97)")
+                  }
+                  onMouseUp={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                  }
+                  onClick={() =>
+                    window.open("mailto:info@lascraspad.com", "_blank")
+                  }
                 >
                   INQUIRE NOW
                 </button>
@@ -711,27 +741,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
+      {/* ═══════════════════════════════════════════════════════════
           TESTIMONIALS SECTION
-      ═══════════════════════════════════════════ */}
+      ═══════════════════════════════════════════════════════════ */}
       <section
         id="testimonials"
         style={{
           backgroundColor: "#0D0D0D",
-          padding: "5.5rem 3.5rem",
+          padding: "5rem 3.5rem",
           borderTop: "1px solid rgba(59,181,255,0.15)",
         }}
       >
         <div style={{ maxWidth: "1140px", margin: "0 auto" }}>
-          <div style={{ marginBottom: "3rem" }}>
+          <div style={{ marginBottom: "2.75rem" }}>
             <h2
               style={{
                 fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "clamp(2.8rem, 5vw, 4.5rem)",
+                fontSize: "clamp(2.6rem, 4.5vw, 4.2rem)",
                 color: "#F5EDD6",
                 letterSpacing: "0.03em",
                 margin: "0 0 0.5rem",
-                textShadow: "0 0 1px rgba(245,237,214,0.8)",
+                textShadow: "0 0 1px rgba(245,237,214,0.7)",
               }}
             >
               WHAT CREW MEMBERS ARE SAYING
@@ -741,20 +771,21 @@ export default function Home() {
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "1rem",
                 color: "#F5EDD6",
-                opacity: 0.6,
-                maxWidth: "500px",
-                lineHeight: 1.65,
+                opacity: 0.58,
+                maxWidth: "480px",
+                lineHeight: 1.7,
               }}
             >
-              Real feedback from aviation professionals who call the LAS Crashpad home.
+              Real feedback from aviation professionals who call the LAS
+              Crashpad home.
             </p>
           </div>
 
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))",
-              gap: "1.5rem",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "1.4rem",
             }}
           >
             {TESTIMONIALS.map((t) => (
@@ -763,51 +794,47 @@ export default function Home() {
                 style={{
                   backgroundColor: "#111111",
                   border: "1px solid rgba(59,181,255,0.18)",
-                  padding: "2rem",
-                  position: "relative",
+                  padding: "1.9rem",
                   transition: "border-color 200ms ease, box-shadow 200ms ease",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = "rgba(59,181,255,0.45)";
                   e.currentTarget.style.boxShadow =
-                    "0 0 25px rgba(59,181,255,0.08)";
+                    "0 0 22px rgba(59,181,255,0.08)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = "rgba(59,181,255,0.18)";
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                {/* Stars */}
                 <div
                   style={{
                     color: "#3BB5FF",
-                    fontSize: "1.1rem",
-                    marginBottom: "1rem",
+                    fontSize: "1.05rem",
+                    marginBottom: "0.9rem",
                     letterSpacing: "0.1em",
                     textShadow: "0 0 8px rgba(59,181,255,0.7)",
                   }}
                 >
                   ★★★★★
                 </div>
-                {/* Quote */}
                 <p
                   style={{
                     fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "0.95rem",
+                    fontSize: "0.93rem",
                     color: "#F5EDD6",
                     opacity: 0.82,
-                    lineHeight: 1.75,
-                    marginBottom: "1.5rem",
+                    lineHeight: 1.78,
+                    marginBottom: "1.4rem",
                     fontStyle: "italic",
                   }}
                 >
                   "{t.text}"
                 </p>
-                {/* Name */}
                 <div
                   style={{
                     fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "1.15rem",
+                    fontSize: "1.1rem",
                     color: "#FF6B1A",
                     letterSpacing: "0.08em",
                     textShadow: "0 0 8px rgba(255,107,26,0.35)",
@@ -818,12 +845,12 @@ export default function Home() {
                 <div
                   style={{
                     fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "0.72rem",
+                    fontSize: "0.7rem",
                     color: "#F5EDD6",
-                    opacity: 0.45,
-                    letterSpacing: "0.12em",
+                    opacity: 0.42,
+                    letterSpacing: "0.13em",
                     textTransform: "uppercase",
-                    marginTop: "0.2rem",
+                    marginTop: "0.18rem",
                   }}
                 >
                   {t.role}
@@ -834,14 +861,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
+      {/* ═══════════════════════════════════════════════════════════
           FOOTER
-      ═══════════════════════════════════════════ */}
+      ═══════════════════════════════════════════════════════════ */}
       <footer
         style={{
           backgroundColor: "#080808",
-          borderTop: "1px solid rgba(255,107,26,0.25)",
-          padding: "2rem 3.5rem",
+          borderTop: "1px solid rgba(255,107,26,0.22)",
+          padding: "1.75rem 3.5rem",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -851,22 +878,22 @@ export default function Home() {
       >
         <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
           <img
-            src={LOGO_MARK_URL}
+            src={LOGO_URL}
             alt=""
             style={{
               width: "26px",
               height: "26px",
               objectFit: "contain",
-              filter: "drop-shadow(0 0 5px rgba(255,107,26,0.5))",
+              filter: "drop-shadow(0 0 4px rgba(255,107,26,0.5))",
             }}
           />
           <span
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "1rem",
-              letterSpacing: "0.12em",
+              fontSize: "0.95rem",
+              letterSpacing: "0.13em",
               color: "#F5EDD6",
-              opacity: 0.6,
+              opacity: 0.55,
             }}
           >
             THE LAS CRASHPAD
@@ -876,35 +903,36 @@ export default function Home() {
         <div
           style={{
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: "0.78rem",
+            fontSize: "0.76rem",
             color: "#F5EDD6",
-            opacity: 0.35,
+            opacity: 0.32,
             letterSpacing: "0.05em",
           }}
         >
-          Las Vegas, Nevada · Aviation Crew Housing · © {new Date().getFullYear()}
+          Las Vegas, Nevada · Aviation Crew Housing · ©{" "}
+          {new Date().getFullYear()}
         </div>
 
         <button
           onClick={scrollToRooms}
           style={{
             backgroundColor: "transparent",
-            border: "1px solid rgba(255,107,26,0.45)",
+            border: "1px solid rgba(255,107,26,0.42)",
             color: "#FF6B1A",
             fontFamily: "'Bebas Neue', sans-serif",
             letterSpacing: "0.1em",
-            fontSize: "0.9rem",
-            padding: "0.4rem 1.3rem",
+            fontSize: "0.88rem",
+            padding: "0.38rem 1.25rem",
             cursor: "pointer",
             transition: "all 150ms ease",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.borderColor = "#FF6B1A";
             e.currentTarget.style.backgroundColor = "rgba(255,107,26,0.08)";
-            e.currentTarget.style.boxShadow = "0 0 12px rgba(255,107,26,0.2)";
+            e.currentTarget.style.boxShadow = "0 0 10px rgba(255,107,26,0.2)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "rgba(255,107,26,0.45)";
+            e.currentTarget.style.borderColor = "rgba(255,107,26,0.42)";
             e.currentTarget.style.backgroundColor = "transparent";
             e.currentTarget.style.boxShadow = "none";
           }}
